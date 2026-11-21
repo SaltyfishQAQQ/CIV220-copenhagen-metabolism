@@ -103,6 +103,8 @@ html,body {{margin:0; background:{SURF};}}
 .city {{background:{PLANE}; border:1.5px solid {LINE}; border-radius:16px; padding:18px 16px; display:flex;
   flex-direction:column; gap:12px; margin-top:28px; height:calc(100% - 28px); box-sizing:border-box;}}
 .skyline {{width:100%; height:54px; display:block;}}
+.city-id {{border-radius:10px; cursor:help; transition:opacity .15s, background .15s;}}
+.city-id.on {{background:#ecebe6;}}
 .city-name {{text-align:center; font-size:20px; font-weight:700; line-height:1.25; padding:14px 0 18px;
   border-bottom:1px solid {LINE};}}
 .loops-h {{text-align:center; font-size:12px; font-weight:700; letter-spacing:.05em; color:{INK2};}}
@@ -252,7 +254,18 @@ def build_diagram(sc):
         (WASTE, "Source separation", f"↺ {sc.fmt(D['waste_separated_t_cap'], tdiv, '.2f')} {tu}{per} recycled",
          "Household waste sorted at the kerb and sent to recycling and biogas: 45% of residential waste."),
     ]
-    city = (f'<div class="city">{SKYLINE}<div class="city-name">CITY OF<br>COPENHAGEN</div>'
+    city_tip = esc(
+        "<b>City of Copenhagen, 2024</b>"
+        f"<br>Population: {POP:,}"
+        "<br>Density: about 7,800 people per km²"
+        "<br>Location: Øresund coast, Denmark (55°40′N)"
+        "<br>Climate: mean 2 °C in winter, 20 °C in summer"
+        "<br>District heating: 98% of heat demand"
+        "<br>Trips on foot, by bike or transit: 71%"
+        "<br>Household water use: 98 L per person per day"
+        "<br>Sewers: mostly combined (rain and sewage in one pipe)")
+    city = (f'<div class="city"><div class="city-id" data-tip="{city_tip}">{SKYLINE}'
+            f'<div class="city-name">CITY OF<br>COPENHAGEN</div></div>'
             f'<div class="loops-h">LOOPS ALREADY CLOSED</div>'
             + "".join(f'<div class="loop" style="border-left-color:{c}" data-tip="{esc(f"<b>{t}</b><br>{tp}")}">'
                       f'<div class="t">{t}</div><div class="s">{s}</div></div>' for c, t, s, tp in loops)
